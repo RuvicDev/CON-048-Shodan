@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conector Shodan — Ruvic</title>
+  <link rel="stylesheet" href="assets/ruvic.css">
+</head>
+<body>
+  <main class="ruvic-container">
+    <nav class="ruvic-toc" aria-label="Índice">
+      <h2 data-i18n="toc_titulo">Contenido</h2>
+      <ol>
+        <li><a href="#que-es" data-i18n="toc_que_es">¿Qué es y para qué sirve?</a></li>
+        <li><a href="#prerrequisitos" data-i18n="toc_prerrequisitos">Prerrequisitos</a></li>
+        <li><a href="#configuracion-fabricante" data-i18n="toc_fabricante">Configuración en el fabricante</a></li>
+        <li><a href="#permisos" data-i18n="toc_permisos">Permisos requeridos</a></li>
+        <li><a href="#configuracion-ruvic" data-i18n="toc_ruvic">Configuración en Ruvic</a></li>
+        <li><a href="#verificacion" data-i18n="toc_verificacion">Verificación</a></li>
+        <li><a href="#solucion-problemas" data-i18n="toc_problemas">Solución de problemas</a></li>
+        <li><a href="#faq-seguridad" data-i18n="toc_faq">Preguntas frecuentes y notas de seguridad</a></li>
+      </ol>
+    </nav>
+
+    <h1 data-i18n="titulo">Conector Shodan</h1>
+    <p class="guide-updated">{{ULTIMA_ACTUALIZACION}}</p>
+
+    <section>
+      <h2 id="que-es" data-i18n="que_es_h2">¿Qué es y para qué sirve?</h2>
+      <p data-i18n="que_es_p1">El conector Shodan permite que el agente de Ruvic consulte el motor de búsqueda de dispositivos conectados a internet Shodan — investigar qué expone una IP, buscar dispositivos/servicios por término, y revisar qué puertos tiene abiertos un host.</p>
+      <p data-i18n="que_es_p2">Una vez configurado, puedes pedirle al agente cosas como:</p>
+      <ul>
+        <li data-i18n="que_es_li1">"¿Qué servicios expone esta IP?"</li>
+        <li data-i18n="que_es_li2">"Busca servidores Apache expuestos en Alemania."</li>
+        <li data-i18n="que_es_li3">"¿Qué puertos tiene abiertos este host?"</li>
+      </ul>
+      <p data-i18n="que_es_p3">Operaciones soportadas:</p>
+      <table>
+        <thead><tr><th data-i18n="tabla_op_col1">Operación</th><th data-i18n="tabla_op_col2">Qué hace</th></tr></thead>
+        <tbody>
+          <tr><td><code>cybersecurity.get_host_info</code></td><td data-i18n="tabla_op_fila1">Consulta toda la información indexada de una IP</td></tr>
+          <tr><td><code>cybersecurity.search_devices</code></td><td data-i18n="tabla_op_fila2">Busca dispositivos/servicios expuestos por término</td></tr>
+          <tr><td><code>cybersecurity.get_open_ports</code></td><td data-i18n="tabla_op_fila3">Obtiene solo los puertos abiertos de un host</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-info">
+        <span class="callout-title" data-i18n="callout_info_titulo">Conector de solo lectura</span>
+        <span data-i18n="callout_info_texto">Shodan consulta un índice de dispositivos ya escaneados — este conector no ejecuta escaneos nuevos en tiempo real ni modifica nada.</span>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="prerrequisitos" data-i18n="prereq_h2">Prerrequisitos</h2>
+      <ul>
+        <li data-i18n="prereq_li1">Una cuenta de <strong>Shodan</strong> (tiene un nivel gratuito con créditos limitados).</li>
+        <li data-i18n="prereq_li2">Saber aproximadamente cuántas búsquedas/consultas necesitará el agente, para elegir un plan con créditos suficientes si el uso va a ser frecuente.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="configuracion-fabricante" data-i18n="fabricante_h2">Configuración en el fabricante</h2>
+      <ol class="ruvic-steps">
+        <li>
+          <strong data-i18n="fabricante_paso1_titulo">Crea una cuenta en Shodan.</strong>
+          <p data-i18n="fabricante_paso1_texto">Ve a <a href="https://account.shodan.io" target="_blank" rel="noopener">account.shodan.io</a> y regístrate.</p>
+        </li>
+        <li>
+          <strong data-i18n="fabricante_paso2_titulo">Copia tu API key.</strong>
+          <p data-i18n="fabricante_paso2_texto">En la sección "API" de tu cuenta, vas a ver tu API key lista para copiar — no requiere ningún paso de aprobación adicional.</p>
+        </li>
+        <li>
+          <strong data-i18n="fabricante_paso3_titulo">Prueba desde línea de comandos (opcional pero recomendado).</strong>
+        </li>
+      </ol>
+      <pre><code>curl "https://api.shodan.io/api-info?key=TU_API_KEY"</code></pre>
+      <p data-i18n="fabricante_curl_nota">Una respuesta con tus créditos y plan confirma que la API key funciona.</p>
+    </section>
+
+    <section>
+      <h2 id="permisos" data-i18n="permisos_h2">Permisos requeridos</h2>
+      <p data-i18n="permisos_texto">No hay roles/permisos que configurar del lado de Shodan más allá de tener una API key válida — el alcance de lo que se puede consultar depende de los créditos de búsqueda/escaneo disponibles en tu plan.</p>
+    </section>
+
+    <section>
+      <h2 id="configuracion-ruvic" data-i18n="ruvic_h2">Configuración en Ruvic</h2>
+      <p data-i18n="ruvic_p1">Entra a <strong>Settings → Conectores</strong>, busca la tarjeta <strong>Shodan</strong> y pulsa <strong>Configurar</strong>.</p>
+      <p data-i18n="ruvic_p2">Pega tu <strong>API Key</strong> en el campo correspondiente. Deja "URL base de la API" en su valor por defecto.</p>
+      <p data-i18n="ruvic_p3">Guarda y pulsa <span class="ruvic-button" data-i18n="boton_probar_conexion">Probar conexión</span>.</p>
+    </section>
+
+    <section>
+      <h2 id="verificacion" data-i18n="verificacion_h2">Verificación</h2>
+      <ol class="ruvic-steps">
+        <li>
+          <strong data-i18n="verificacion_paso1_titulo">Test de conexión exitoso.</strong>
+          <p data-i18n="verificacion_paso1_texto">El botón <em>Probar conexión</em> debe responder: <em>"Conexión exitosa a https://api.shodan.io"</em>.</p>
+        </li>
+        <li>
+          <strong data-i18n="verificacion_paso2_titulo">Prueba mínima con el agente.</strong>
+          <p data-i18n="verificacion_paso2_texto">Pide algo de bajo costo primero:</p>
+          <blockquote data-i18n="verificacion_paso2_cita">"¿Qué puertos tiene abiertos la IP 8.8.8.8?"</blockquote>
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2 id="solucion-problemas" data-i18n="problemas_h2">Solución de problemas</h2>
+      <table>
+        <thead><tr><th data-i18n="problemas_tabla_col1">Mensaje / síntoma</th><th data-i18n="problemas_tabla_col2">Causa probable y solución</th></tr></thead>
+        <tbody>
+          <tr><td data-i18n="problemas_fila1_sintoma">"API key inválida o revocada"</td><td data-i18n="problemas_fila1_causa">Verifica que copiaste la key completa desde account.shodan.io → API.</td></tr>
+          <tr><td data-i18n="problemas_fila2_sintoma">"No encontrado" en get_host_info/get_open_ports</td><td data-i18n="problemas_fila2_causa">Shodan no tiene esa IP indexada — no significa necesariamente que el host esté caído, solo que Shodan no la ha escaneado o indexado.</td></tr>
+          <tr><td data-i18n="problemas_fila3_sintoma">"Límite de peticiones/créditos alcanzado"</td><td data-i18n="problemas_fila3_causa">Se agotaron los créditos de búsqueda/consulta del plan — espera al siguiente ciclo o mejora el plan en Shodan.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 id="faq-seguridad" data-i18n="faq_h2">Preguntas frecuentes y notas de seguridad</h2>
+      <h3 data-i18n="faq_p1_titulo">¿Este conector puede escanear una IP en tiempo real?</h3>
+      <p data-i18n="faq_p1_texto">No. Consulta el índice ya recolectado por Shodan — no ejecuta un escaneo activo bajo demanda.</p>
+
+      <h3 data-i18n="faq_p2_titulo">¿Los resultados son "vulnerabilidades confirmadas"?</h3>
+      <p data-i18n="faq_p2_texto">No — Shodan reporta banners y servicios detectados. La interpretación de si eso representa un riesgo real la debe hacer una persona con contexto del sistema.</p>
+
+      <h3 data-i18n="faq_p3_titulo">¿Dónde queda guardada la API key?</h3>
+      <p data-i18n="faq_p3_texto">Como secreto en el almacén de credenciales de la plataforma. La interfaz nunca vuelve a mostrarla.</p>
+
+      <div class="callout callout-warning">
+        <span class="callout-title" data-i18n="buenas_practicas_titulo">Buenas prácticas</span>
+        <span data-i18n="buenas_practicas_texto">Ten presente que las búsquedas (search_devices) consumen créditos de tu cuenta — evita llamadas repetidas sin necesidad real; y no presentes los hallazgos como vulnerabilidades confirmadas sin revisión humana.</span>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    window.I18N = window.I18N || {};
+    window.I18N['shodan'] = {
+      es: {
+        "toc_titulo": "Contenido",
+        "toc_que_es": "¿Qué es y para qué sirve?",
+        "toc_prerrequisitos": "Prerrequisitos",
+        "toc_fabricante": "Configuración en el fabricante",
+        "toc_permisos": "Permisos requeridos",
+        "toc_ruvic": "Configuración en Ruvic",
+        "toc_verificacion": "Verificación",
+        "toc_problemas": "Solución de problemas",
+        "toc_faq": "Preguntas frecuentes y notas de seguridad",
+        "titulo": "Conector Shodan",
+        "que_es_h2": "¿Qué es y para qué sirve?",
+        "que_es_p1": "El conector Shodan permite que el agente de Ruvic consulte el motor de búsqueda de dispositivos conectados a internet Shodan — investigar qué expone una IP, buscar dispositivos/servicios por término, y revisar qué puertos tiene abiertos un host.",
+        "que_es_p2": "Una vez configurado, puedes pedirle al agente cosas como:",
+        "que_es_li1": "\"¿Qué servicios expone esta IP?\"",
+        "que_es_li2": "\"Busca servidores Apache expuestos en Alemania.\"",
+        "que_es_li3": "\"¿Qué puertos tiene abiertos este host?\"",
+        "que_es_p3": "Operaciones soportadas:",
+        "tabla_op_col1": "Operación",
+        "tabla_op_col2": "Qué hace",
+        "tabla_op_fila1": "Consulta toda la información indexada de una IP",
+        "tabla_op_fila2": "Busca dispositivos/servicios expuestos por término",
+        "tabla_op_fila3": "Obtiene solo los puertos abiertos de un host",
+        "callout_info_titulo": "Conector de solo lectura",
+        "callout_info_texto": "Shodan consulta un índice de dispositivos ya escaneados — este conector no ejecuta escaneos nuevos en tiempo real ni modifica nada.",
+        "prereq_h2": "Prerrequisitos",
+        "prereq_li1": "Una cuenta de <strong>Shodan</strong> (tiene un nivel gratuito con créditos limitados).",
+        "prereq_li2": "Saber aproximadamente cuántas búsquedas/consultas necesitará el agente, para elegir un plan con créditos suficientes si el uso va a ser frecuente.",
+        "fabricante_h2": "Configuración en el fabricante",
+        "fabricante_paso1_titulo": "Crea una cuenta en Shodan.",
+        "fabricante_paso1_texto": "Ve a account.shodan.io y regístrate.",
+        "fabricante_paso2_titulo": "Copia tu API key.",
+        "fabricante_paso2_texto": "En la sección \"API\" de tu cuenta, vas a ver tu API key lista para copiar — no requiere ningún paso de aprobación adicional.",
+        "fabricante_paso3_titulo": "Prueba desde línea de comandos (opcional pero recomendado).",
+        "fabricante_curl_nota": "Una respuesta con tus créditos y plan confirma que la API key funciona.",
+        "permisos_h2": "Permisos requeridos",
+        "permisos_texto": "No hay roles/permisos que configurar del lado de Shodan más allá de tener una API key válida — el alcance de lo que se puede consultar depende de los créditos de búsqueda/escaneo disponibles en tu plan.",
+        "ruvic_h2": "Configuración en Ruvic",
+        "ruvic_p1": "Entra a <strong>Settings → Conectores</strong>, busca la tarjeta <strong>Shodan</strong> y pulsa <strong>Configurar</strong>.",
+        "ruvic_p2": "Pega tu <strong>API Key</strong> en el campo correspondiente. Deja \"URL base de la API\" en su valor por defecto.",
+        "ruvic_p3": "Guarda y pulsa",
+        "boton_probar_conexion": "Probar conexión",
+        "verificacion_h2": "Verificación",
+        "verificacion_paso1_titulo": "Test de conexión exitoso.",
+        "verificacion_paso1_texto": "El botón <em>Probar conexión</em> debe responder: <em>\"Conexión exitosa a https://api.shodan.io\"</em>.",
+        "verificacion_paso2_titulo": "Prueba mínima con el agente.",
+        "verificacion_paso2_texto": "Pide algo de bajo costo primero:",
+        "verificacion_paso2_cita": "\"¿Qué puertos tiene abiertos la IP 8.8.8.8?\"",
+        "problemas_h2": "Solución de problemas",
+        "problemas_tabla_col1": "Mensaje / síntoma",
+        "problemas_tabla_col2": "Causa probable y solución",
+        "problemas_fila1_sintoma": "\"API key inválida o revocada\"",
+        "problemas_fila1_causa": "Verifica que copiaste la key completa desde account.shodan.io → API.",
+        "problemas_fila2_sintoma": "\"No encontrado\" en get_host_info/get_open_ports",
+        "problemas_fila2_causa": "Shodan no tiene esa IP indexada — no significa necesariamente que el host esté caído, solo que Shodan no la ha escaneado o indexado.",
+        "problemas_fila3_sintoma": "\"Límite de peticiones/créditos alcanzado\"",
+        "problemas_fila3_causa": "Se agotaron los créditos de búsqueda/consulta del plan — espera al siguiente ciclo o mejora el plan en Shodan.",
+        "faq_h2": "Preguntas frecuentes y notas de seguridad",
+        "faq_p1_titulo": "¿Este conector puede escanear una IP en tiempo real?",
+        "faq_p1_texto": "No. Consulta el índice ya recolectado por Shodan — no ejecuta un escaneo activo bajo demanda.",
+        "faq_p2_titulo": "¿Los resultados son \"vulnerabilidades confirmadas\"?",
+        "faq_p2_texto": "No — Shodan reporta banners y servicios detectados. La interpretación de si eso representa un riesgo real la debe hacer una persona con contexto del sistema.",
+        "faq_p3_titulo": "¿Dónde queda guardada la API key?",
+        "faq_p3_texto": "Como secreto en el almacén de credenciales de la plataforma. La interfaz nunca vuelve a mostrarla.",
+        "buenas_practicas_titulo": "Buenas prácticas",
+        "buenas_practicas_texto": "Ten presente que las búsquedas (search_devices) consumen créditos de tu cuenta — evita llamadas repetidas sin necesidad real; y no presentes los hallazgos como vulnerabilidades confirmadas sin revisión humana."
+      },
+      en: {
+        "toc_titulo": "Contents",
+        "toc_que_es": "What is it and what is it for?",
+        "toc_prerrequisitos": "Prerequisites",
+        "toc_fabricante": "Vendor-side setup",
+        "toc_permisos": "Required permissions",
+        "toc_ruvic": "Setup in Ruvic",
+        "toc_verificacion": "Verification",
+        "toc_problemas": "Troubleshooting",
+        "toc_faq": "FAQ and security notes",
+        "titulo": "Shodan Connector",
+        "que_es_h2": "What is it and what is it for?",
+        "que_es_p1": "The Shodan connector lets the Ruvic agent query the Shodan search engine for internet-connected devices — investigate what an IP exposes, search devices/services by term, and check what ports a host has open.",
+        "que_es_p2": "Once configured, you can ask the agent things like:",
+        "que_es_li1": "\"What services does this IP expose?\"",
+        "que_es_li2": "\"Find exposed Apache servers in Germany.\"",
+        "que_es_li3": "\"What ports does this host have open?\"",
+        "que_es_p3": "Supported operations:",
+        "tabla_op_col1": "Operation",
+        "tabla_op_col2": "What it does",
+        "tabla_op_fila1": "Gets all indexed information for an IP",
+        "tabla_op_fila2": "Searches exposed devices/services by term",
+        "tabla_op_fila3": "Gets only a host's open ports",
+        "callout_info_titulo": "Read-only connector",
+        "callout_info_texto": "Shodan queries an index of already-scanned devices — this connector doesn't run new real-time scans or modify anything.",
+        "prereq_h2": "Prerequisites",
+        "prereq_li1": "A <strong>Shodan</strong> account (has a free tier with limited credits).",
+        "prereq_li2": "A rough idea of how many searches/queries the agent will need, to choose a plan with enough credits if usage will be frequent.",
+        "fabricante_h2": "Vendor-side setup",
+        "fabricante_paso1_titulo": "Create a Shodan account.",
+        "fabricante_paso1_texto": "Go to account.shodan.io and sign up.",
+        "fabricante_paso2_titulo": "Copy your API key.",
+        "fabricante_paso2_texto": "In the \"API\" section of your account, you'll see your API key ready to copy — no additional approval step required.",
+        "fabricante_paso3_titulo": "Test from the command line (optional but recommended).",
+        "fabricante_curl_nota": "A response with your credits and plan confirms the API key works.",
+        "permisos_h2": "Required permissions",
+        "permisos_texto": "There are no roles/permissions to configure on Shodan's side beyond having a valid API key — what you can query depends on the search/scan credits available in your plan.",
+        "ruvic_h2": "Setup in Ruvic",
+        "ruvic_p1": "Go to <strong>Settings → Connectors</strong>, find the <strong>Shodan</strong> card and click <strong>Configure</strong>.",
+        "ruvic_p2": "Paste your <strong>API Key</strong> into the corresponding field. Leave \"API base URL\" at its default.",
+        "ruvic_p3": "Save and click",
+        "boton_probar_conexion": "Test connection",
+        "verificacion_h2": "Verification",
+        "verificacion_paso1_titulo": "Successful connection test.",
+        "verificacion_paso1_texto": "The <em>Test connection</em> button should return: <em>\"Successful connection to https://api.shodan.io\"</em>.",
+        "verificacion_paso2_titulo": "Minimal test with the agent.",
+        "verificacion_paso2_texto": "Ask something low-cost first:",
+        "verificacion_paso2_cita": "\"What ports does IP 8.8.8.8 have open?\"",
+        "problemas_h2": "Troubleshooting",
+        "problemas_tabla_col1": "Message / symptom",
+        "problemas_tabla_col2": "Likely cause and fix",
+        "problemas_fila1_sintoma": "\"Invalid or revoked API key\"",
+        "problemas_fila1_causa": "Verify you copied the full key from account.shodan.io → API.",
+        "problemas_fila2_sintoma": "\"Not found\" on get_host_info/get_open_ports",
+        "problemas_fila2_causa": "Shodan doesn't have that IP indexed — this doesn't necessarily mean the host is down, just that Shodan hasn't scanned or indexed it.",
+        "problemas_fila3_sintoma": "\"Request/credit limit reached\"",
+        "problemas_fila3_causa": "The plan's search/query credits ran out — wait for the next cycle or upgrade the Shodan plan.",
+        "faq_h2": "FAQ and security notes",
+        "faq_p1_titulo": "Can this connector scan an IP in real time?",
+        "faq_p1_texto": "No. It queries Shodan's already-collected index — it doesn't run an on-demand active scan.",
+        "faq_p2_titulo": "Are the results \"confirmed vulnerabilities\"?",
+        "faq_p2_texto": "No — Shodan reports detected banners and services. Whether that represents a real risk should be interpreted by a person with context on the system.",
+        "faq_p3_titulo": "Where is the API key stored?",
+        "faq_p3_texto": "As a secret in the platform's credential store. The UI never displays it again.",
+        "buenas_practicas_titulo": "Best practices",
+        "buenas_practicas_texto": "Keep in mind that searches (search_devices) consume your account's credits — avoid repeated calls without real need; and don't present findings as confirmed vulnerabilities without human review."
+      }
+    };
+  </script>
+</body>
+</html>

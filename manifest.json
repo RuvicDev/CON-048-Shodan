@@ -1,0 +1,39 @@
+{
+  "id": "shodan",
+  "name": "Shodan",
+  "name_en": "Shodan",
+  "version": "1.0.0",
+  "description": "Búsqueda de dispositivos y servicios expuestos en internet: consultar información de una IP, buscar por término, y obtener los puertos abiertos de un host.",
+  "description_en": "Search for exposed devices and services on the internet: look up an IP's information, search by term, and get a host's open ports.",
+  "category": "cybersecurity",
+  "category_en": "cybersecurity",
+  "keywords": ["shodan", "osint", "puertos abiertos", "open ports", "dispositivos expuestos", "exposed devices", "ciberseguridad", "cybersecurity", "reconocimiento", "asset discovery"],
+  "icon": "icon.svg",
+  "library": {
+    "package": "ruvic-shodan-connector",
+    "install": "pip install git+https://github.com/tu-org/conector-shodan.git#subdirectory=lib",
+    "import_name": "ruvic_shodan_connector"
+  },
+  "auth_modes": [
+    {
+      "id": "api_key",
+      "label": "API Key",
+      "fields": [
+        { "key": "api_key", "label": "API Key", "type": "password", "secret": true, "required": true, "help_text": "La encuentras en account.shodan.io, sección 'API'." },
+        { "key": "base_url", "label": "URL base de la API (opcional)", "type": "text", "required": false, "default": "https://api.shodan.io" },
+        { "key": "request_timeout", "label": "Timeout de peticiones (segundos)", "type": "number", "required": false, "default": "20" }
+      ]
+    }
+  ],
+  "env_prefix": "RUVIC_SHODAN_",
+  "operations": [
+    "cybersecurity.get_host_info",
+    "cybersecurity.search_devices",
+    "cybersecurity.get_open_ports"
+  ],
+  "test_connection": true,
+  "docs": {
+    "skill": "SKILL.md",
+    "permissions_note": "No hay roles/permisos que configurar del lado de Shodan más allá de tener una API key válida — el alcance de lo que se puede consultar depende del plan contratado (número de créditos de búsqueda/escaneo disponibles). Este conector es de solo lectura por naturaleza: la API que usa no tiene ninguna operación de escritura o modificación."
+  }
+}
