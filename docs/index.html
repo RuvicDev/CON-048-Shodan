@@ -8,6 +8,9 @@
 </head>
 <body>
   <main class="ruvic-container">
+    <h1 data-i18n="titulo">Conector Shodan</h1>
+    <p class="guide-updated">{{ULTIMA_ACTUALIZACION}}</p>
+
     <nav class="ruvic-toc" aria-label="Índice">
       <h2 data-i18n="toc_titulo">Contenido</h2>
       <ol>
@@ -21,9 +24,6 @@
         <li><a href="#faq-seguridad" data-i18n="toc_faq">Preguntas frecuentes y notas de seguridad</a></li>
       </ol>
     </nav>
-
-    <h1 data-i18n="titulo">Conector Shodan</h1>
-    <p class="guide-updated">{{ULTIMA_ACTUALIZACION}}</p>
 
     <section>
       <h2 id="que-es" data-i18n="que_es_h2">¿Qué es y para qué sirve?</h2>
@@ -79,6 +79,7 @@
     <section>
       <h2 id="permisos" data-i18n="permisos_h2">Permisos requeridos</h2>
       <p data-i18n="permisos_texto">No hay roles/permisos que configurar del lado de Shodan más allá de tener una API key válida — el alcance de lo que se puede consultar depende de los créditos de búsqueda/escaneo disponibles en tu plan.</p>
+      <table><thead><tr><th data-i18n="permisos_tabla_th1">Permiso</th><th data-i18n="permisos_tabla_th2">Para qué sirve</th></tr></thead><tbody><tr><td data-i18n="permisos_tabla_r1a">API key válida</td><td data-i18n="permisos_tabla_r1b">Autentica las consultas de hosts, dispositivos y puertos</td></tr><tr><td data-i18n="permisos_tabla_r2a">Créditos del plan</td><td data-i18n="permisos_tabla_r2b">Definen cuánto se puede buscar y escanear</td></tr></tbody></table>
     </section>
 
     <section>
@@ -173,6 +174,12 @@
         "fabricante_curl_nota": "Una respuesta con tus créditos y plan confirma que la API key funciona.",
         "permisos_h2": "Permisos requeridos",
         "permisos_texto": "No hay roles/permisos que configurar del lado de Shodan más allá de tener una API key válida — el alcance de lo que se puede consultar depende de los créditos de búsqueda/escaneo disponibles en tu plan.",
+        "permisos_tabla_th1": "Permiso",
+        "permisos_tabla_th2": "Para qué sirve",
+        "permisos_tabla_r1a": "API key válida",
+        "permisos_tabla_r1b": "Autentica las consultas de hosts, dispositivos y puertos",
+        "permisos_tabla_r2a": "Créditos del plan",
+        "permisos_tabla_r2b": "Definen cuánto se puede buscar y escanear",
         "ruvic_h2": "Configuración en Ruvic",
         "ruvic_p1": "Entra a <strong>Settings → Conectores</strong>, busca la tarjeta <strong>Shodan</strong> y pulsa <strong>Configurar</strong>.",
         "ruvic_p2": "Pega tu <strong>API Key</strong> en el campo correspondiente. Deja \"URL base de la API\" en su valor por defecto.",
@@ -240,6 +247,12 @@
         "fabricante_curl_nota": "A response with your credits and plan confirms the API key works.",
         "permisos_h2": "Required permissions",
         "permisos_texto": "There are no roles/permissions to configure on Shodan's side beyond having a valid API key — what you can query depends on the search/scan credits available in your plan.",
+        "permisos_tabla_th1": "Permission",
+        "permisos_tabla_th2": "What it is for",
+        "permisos_tabla_r1a": "Valid API key",
+        "permisos_tabla_r1b": "Authenticates host, device and port lookups",
+        "permisos_tabla_r2a": "Plan credits",
+        "permisos_tabla_r2b": "Set how much you can search and scan",
         "ruvic_h2": "Setup in Ruvic",
         "ruvic_p1": "Go to <strong>Settings → Connectors</strong>, find the <strong>Shodan</strong> card and click <strong>Configure</strong>.",
         "ruvic_p2": "Paste your <strong>API Key</strong> into the corresponding field. Leave \"API base URL\" at its default.",
